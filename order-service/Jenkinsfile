@@ -34,7 +34,7 @@ pipeline {
             steps {
                 script {
                     sh 'docker stop order-service || true && docker rm order-service || true'
-                    sh 'docker run -d --name order-service -p 8081:8080 product-service:latest'
+                    sh 'docker run -d --name order-service -p 8081:8080 order-service:latest'
                 }
             }
         }
