@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        MAVEN_HOME = tool 'Maven 3.9.6'
+    }
+
     stages {
         stage('Clone') {
             steps {
@@ -11,7 +15,7 @@ pipeline {
         stage('Build') {
             steps {
                 dir('product-service') {
-                    sh './mvnw clean package -DskipTests'
+                    sh "${MAVEN_HOME}/bin/mvn clean package -DskipTests"
                 }
             }
         }
