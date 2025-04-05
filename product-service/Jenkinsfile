@@ -1,0 +1,38 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Clone') {
+            steps {
+                git 'https://github.com/BALRAJ1313/ecommerce-services.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                dir('product-service') {
+                    sh './mvnw clean package -DskipTests'
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                dir('product-service') {
+                    script {
+                        dockerImage = docker.build("product-service:latest")
+                    }
+                }
+            }
+        }
+
+        stage('Run Container') {
+            steps {
+                script {
+                    sh 'docker stop product-service || true && docker rm product-service || true'
+                    sh 'docker run -d --name product-service -p 8080:8080 product-service:latest'
+                }
+            }
+        }
+    }
+}
